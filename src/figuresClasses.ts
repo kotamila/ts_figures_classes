@@ -5,15 +5,15 @@ export interface Figure {
 }
 
 export class Triangle implements Figure {
-  shape: 'triangle' = 'triangle';
+  public shape: 'triangle' = 'triangle';
 
-  color: 'red' | 'green' | 'blue';
+  public color: 'red' | 'green' | 'blue';
 
-  a: number;
+  private a: number;
 
-  b: number;
+  private b: number;
 
-  c: number;
+  private c: number;
 
   constructor(
     color: 'red' | 'green' | 'blue',
@@ -21,15 +21,34 @@ export class Triangle implements Figure {
     b: number,
     c: number,
   ) {
-    if (a <= 0 || b <= 0 || c <= 0) {
-      throw new Error('Triangle sides must be greater than 0');
+    if (a <= 0) {
+      throw new Error(`Triangle side 'a' must be greater than 0, got ${a}`);
     }
 
-    const longest = Math.max(a, b, c);
-    const sumOthers = a + b + c - longest;
+    if (b <= 0) {
+      throw new Error(`Triangle side 'b' must be greater than 0, got ${b}`);
+    }
 
-    if (longest >= sumOthers) {
-      throw new Error(`sides ${a}, ${b} and ${c} can't form a triangle`);
+    if (c <= 0) {
+      throw new Error(`Triangle side 'c' must be greater than 0, got ${c}`);
+    }
+
+    if (a + b <= c) {
+      throw new Error(
+        `Triangle inequality failed: a + b must be greater than c (${a} + ${b} <= ${c})`,
+      );
+    }
+
+    if (a + c <= b) {
+      throw new Error(
+        `Triangle inequality failed: a + c must be greater than b (${a} + ${c} <= ${b})`,
+      );
+    }
+
+    if (b + c <= a) {
+      throw new Error(
+        `Triangle inequality failed: b + c must be greater than a (${b} + ${c} <= ${a})`,
+      );
     }
 
     this.color = color;
@@ -38,30 +57,30 @@ export class Triangle implements Figure {
     this.c = c;
   }
 
-  getArea(): number {
-    const p = (this.a + this.b + this.c) / 2;
-    const area = Math.sqrt(p * (p - this.a) * (p - this.b) * (p - this.c));
+  public getArea(): number {
+    const s = (this.a + this.b + this.c) / 2;
+    const area = Math.sqrt(s * (s - this.a) * (s - this.b) * (s - this.c));
 
     return Math.floor(area * 100) / 100;
   }
 }
 
 export class Circle implements Figure {
-  shape: 'circle' = 'circle';
+  public shape: 'circle' = 'circle';
 
-  color: 'red' | 'green' | 'blue';
+  public color: 'red' | 'green' | 'blue';
 
-  radius: number;
+  private radius: number;
 
   constructor(color: 'red' | 'green' | 'blue', radius: number) {
     if (radius <= 0) {
-      throw new Error('Radius must be greater than 0');
+      throw new Error(`Circle radius must be greater than 0, got ${radius}`);
     }
     this.color = color;
     this.radius = radius;
   }
 
-  getArea(): number {
+  public getArea(): number {
     const area = Math.PI * this.radius * this.radius;
 
     return Math.floor(area * 100) / 100;
@@ -69,25 +88,28 @@ export class Circle implements Figure {
 }
 
 export class Rectangle implements Figure {
-  shape: 'rectangle' = 'rectangle';
+  public shape: 'rectangle' = 'rectangle';
 
-  color: 'red' | 'green' | 'blue';
+  public color: 'red' | 'green' | 'blue';
 
-  width: number;
+  private width: number;
 
-  height: number;
+  private height: number;
 
   constructor(color: 'red' | 'green' | 'blue', width: number, height: number) {
-    if (width <= 0 || height <= 0) {
-      throw new Error('Width and height must be greater than 0');
+    if (width <= 0) {
+      throw new Error(`Rectangle width must be greater than 0, got ${width}`);
     }
 
+    if (height <= 0) {
+      throw new Error(`Rectangle height must be greater than 0, got ${height}`);
+    }
     this.color = color;
     this.width = width;
     this.height = height;
   }
 
-  getArea(): number {
+  public getArea(): number {
     const area = this.width * this.height;
 
     return Math.floor(area * 100) / 100;
